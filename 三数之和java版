@@ -1,0 +1,109 @@
+方法一：
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        // 拿到数组长度
+        int length = nums.length;
+        // 排序
+        Arrays.sort(nums);
+        // 定义新的空数组
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        // 遍历第一个索引first
+        for(int first=0;first<length;first++) {
+            // 若first值==前面的值，跳过，有前提
+            if(first>0 && nums[first] == nums[first-1]) {
+                continue;
+            }
+            // 定义最右端的值third
+            int third = length - 1;
+            // int新值=nums[first]
+            int target = -nums[first];
+            // 遍历第二个索引second
+            for(int second = first + 1;second < length;second++ ) {
+                // 若second值==前面的值，跳过，有前提
+                if(second > first + 1 && nums[second] == nums[second-1]) {
+                    continue;
+                }
+
+                // 这里不能相加为sum，因为后面的third还在一直--
+
+                // 当sum>0时，thrid--，有前提
+                while(third > second && nums[second] + nums[third] > target) {
+                    third-- ;
+                }
+                // 若指针重合，跳出
+                if(third == second) {
+                    break;
+                }
+                // 若和nums[first] 之和为0
+                if(nums[second] + nums[third] == target) {
+                    List<Integer> list = new ArrayList<Integer>();
+                    list.add(nums[first]);
+                    list.add(nums[second]);
+                    list.add(nums[third]);
+                     // 添加进数组
+                    ans.add(list);
+                }
+            }
+        }
+        // 返回数组
+        return ans;
+    }
+}
+
+
+
+方法二：
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        // 1.定义空数组
+        List<List<Integer>> ans = new ArrayList();
+        // 2.length获取数组长度
+        int length = nums.length;
+        // 3.判断：如果数组为空或者长度<3，直接返回空数组
+        if(nums == null || length < 3) return ans;
+        // 4.给数组排序
+        Arrays.sort(nums);
+        // 5.遍历数组
+        for(int i = 0;i < length - 2;i ++) {
+            // 5.1 若第一个数都>0了，直接中断循环
+            if(nums[i] > 0) break;
+            // 5.2 若前面的数和当前的数相等，跳过
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            // 5.3 定义左右指针
+            int left = i + 1;
+            int right = length - 1;
+            // 5.4 再次循环，只要左指针在右指针左侧，就一直执行
+            while(left < right) {
+                // 5.4.1 求和sum
+                int sum = nums[i] + nums[left] + nums[right];
+                // 5.4.2 若和为0
+                if(sum == 0) {
+                    // 1 将数组添加进空数组
+                    ans.add(Arrays.asList(nums[i],nums[left],nums[right]));
+                    // 2 若左指针的数和后面的数相等且左指针始终小于右指针 左指针+1
+                    while(left < right && nums[left] == nums[left + 1]) left ++;
+                    // 3 若右指针的数和前面的数相等且左指针始终小于右指针 右指针-1
+                    while(left < right && nums[right] == nums[right - 1]) right --;
+                    // 4 此时，两者都再也找不到符合的数和彼此相加为0，故left和right都要移动
+                    left ++;
+                    right--;
+                }
+                // 5.4.3 若sum小于0，左指针+1
+                else if (sum < 0) left ++;
+                // 5.4.4 若sum大于0，右指针-1
+                else if( sum > 0) right--;
+            }
+        }
+        // 6 返回数组
+        return ans;
+    }
+}
+
+
+
+
+
+
+
+
+
