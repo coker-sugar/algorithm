@@ -1,3 +1,46 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        // 再写心得：
+            // 1、定义、添加数组不熟练，对于构建空数组和添加数组的熟练度不够
+            // 2、必要处细节没有做好：因为题目中要求不能重复添加，所以当left、middle、right三个索引对应的值有重复时，应当跳过；把握好三者跳过的时机，left应该在遍历一次后再跳过，判定条件为：left > 0 && nums[left] == nums[left -1]；middle和right应该在数组和为0时，再把middle和right跳过。
+        List<List<Integer>> newarr = new ArrayList<List<Integer>>();
+        if(nums == null || nums.length <= 2) {
+            return newarr;
+        }
+        int len = nums.length;
+        Arrays.sort(nums);
+
+        for(int left = 0;left < len - 2;left ++) {
+            int middle = left + 1,right = len - 1;
+            if(left > 0 && nums[left] == nums[left -1]) continue;
+            if(nums[left]> 0) return newarr;
+            
+            while(middle < right) {
+                int sum = nums[left] + nums[middle] + nums[right];
+                if(sum == 0) {
+                    List<Integer> list = new ArrayList<Integer>();
+                    list.add(nums[left]);
+                    list.add(nums[middle]);
+                    list.add(nums[right]);
+                    newarr.add(list);
+
+                    while(middle < right && nums[middle] == nums[middle + 1]) middle ++;
+                    while(middle < right && nums[right] == nums[right - 1]) right --;
+
+                    middle ++;
+                    right --;
+                }else if(sum < 0) {
+                    middle ++;
+                } else if(sum > 0) {
+                    right --;
+                } 
+
+            }
+        }
+        return newarr;
+    }
+}
+
 方法一：
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
@@ -98,12 +141,3 @@ class Solution {
         return ans;
     }
 }
-
-
-
-
-
-
-
-
-
