@@ -27,6 +27,7 @@ var moveZeroes = function(nums) {
     return nums;
 };
 
+
 方法二：去中间0，后面加0
 var moveZeroes = function(nums) {
         let len = nums.length;
