@@ -1,0 +1,85 @@
+41. 缺失的第一个正数
+已解答
+困难
+相关标签
+相关企业
+提示
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+
+请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
+ 
+
+示例 1：
+
+输入：nums = [1,2,0]
+输出：3
+示例 2：
+
+输入：nums = [3,4,-1,1]
+输出：2
+示例 3：
+
+输入：nums = [7,8,9,11,12]
+输出：1
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        Arrays.sort(nums);
+        if(nums[nums.length - 1] <= 0) {
+            return 1;
+        }
+        // 这里有个坑，直接return之后，并不会中断程序，而是会继续执行下去
+        // int num = 0;
+        // for(int i = 0; i < nums.length; i ++) {
+        //     if(nums[i] > 0) {
+        //         for(int j = i; j < nums.length; j ++) {
+        //             num ++;
+        //             if(num < nums[i]){
+        //                 return num;
+        //             }
+        //         }
+        //         return ++num;
+        //     }
+        // }
+        int num = 1;
+        for(int i = 0; i < nums.length; i ++) {
+            if(nums[i] > 0) {
+                    if(num == nums[i]){
+                        num ++;
+                    }
+                }
+        }
+        return num;
+    }
+}
+
+
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        // 返回的数要么再1——length之内，要么就是length + 1；
+        // 给1——length之内的就打上标记（转为负数）
+        // 遇到的第一个不是负数的，其索引 + 1便是最小值
+        int n = nums.length;
+        // 将负数全部转为负数
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] <= 0) {
+                nums[i] = n + 1;
+            }
+        }
+        // 给所有在1 - n范围内的数打上标记
+        for (int i = 0; i < n; ++i) {
+            int num = Math.abs(nums[i]);
+            if (num <= n) {
+                nums[num - 1] = -Math.abs(nums[num - 1]);
+            }
+        }
+        // 值不为负数，返回索引
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] > 0) {
+                return i + 1;
+            }
+        }
+        return n + 1;
+    }
+}
