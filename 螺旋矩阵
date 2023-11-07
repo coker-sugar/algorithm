@@ -1,0 +1,22 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        // 定制上下边界和左右边界，当边界交错时即返回数组
+        int m = matrix.length,n = matrix[0].length;
+        List<Integer> arr = new ArrayList<>();
+        int up = 0, down = m - 1,left = 0,right = n - 1;
+        while(true) {
+            for(int i = left;i <= right; i ++) arr.add(matrix[up][i]);
+            if(++up > down) break;
+
+            for(int i = up; i <= down; i ++) arr.add(matrix[i][right]);
+            if(--right < left) break;
+
+            for(int i = right;i >= left; i --) arr.add(matrix[down][i]);
+            if(--down < up) break;
+
+            for(int i = down;i >= up; i--) arr.add(matrix[i][left]);
+            if(++left > right) break;
+        }
+        return arr;
+    }
+}
