@@ -1,0 +1,145 @@
+73. 矩阵置零
+已解答
+中等
+相关标签
+相关企业
+提示
+给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
+
+输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
+输出：[[1,0,1],[0,0,0],[1,0,1]]
+
+输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+
+// 方法一
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        // 如果当前值为0，标记当前值的行和列
+        // 被标记的行和列都被赋值为0
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[] xlen = new int[m];
+        int[] ylen = new int[n];
+        for(int i = 0;i < m;i ++) {
+            for(int j = 0;j < n;j ++) {
+                if(matrix[i][j] == 0) {
+                    xlen[i] = 1;
+                    ylen[j] = 1;
+                }
+            }
+        }
+        // for(int i = 0;i < m;i ++) {
+        //     if(xlen[i] == 1) {
+        //         for(int j = 0;j < n;j ++) {
+        //             matrix[i][j] = 0;
+        //         }
+        //     }
+        // }
+        // for(int j = 0;j < n;j ++) {
+        //     if(ylen[j] == 1) {
+        //         for(int i = 0;i < m;i ++) {
+        //             matrix[i][j] = 0;
+        //         }
+        //     }
+        // }
+        // 重复了，如果当前值已经被标记了，那么当前行或列上的数就赋值为0
+        for(int i = 0;i < m;i ++) {
+            for(int j = 0;j < n;j ++) {
+                if(xlen[i] == 1 || ylen[j] ==1) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+}
+
+
+// 方法二
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        // 如果第一行和第一列有0，则记录
+        // 从第二行和第二列找，如果有0，让[i][0] 和 [0][j] 都置零
+        // 从第二行和第二列开始遍历，如果[i][0]或[0][j]有零，就让当前值赋值为零
+        // 再找第一行和第二列是否有记录，如果有，就让对应行或列的所有值赋值为0
+        int m = matrix.length;
+        int n = matrix[0].length;
+        // 标记第一行和第一列
+        boolean col = false, row = false;
+        // 第一列标记为0
+        for(int i = 0;i < m;i ++) {
+            if(matrix[i][0] == 0) {
+                col = true;
+            }
+        }
+        for(int j = 0;j < n;j ++) {
+            if(matrix[0][j] == 0) {
+                row = true;
+            }
+        }
+        // 找除第一行和第一列数组中为0的数
+        for(int i = 1;i < m;i ++) {
+            for(int j = 1;j < n;j ++) {
+                if(matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        // 找到了就更新该数的第一行和第一列中的某个数为0
+        for(int i = 1;i < m;i ++) {
+            for(int j = 1;j < n;j ++) {
+                if(matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        // 如果第一列有数为0
+        if(col) {
+            for(int i = 0;i < m;i ++) {
+                matrix[i][0] = 0;
+            }
+        }
+        // 如果第一行有数为0
+        if(row) {
+            // 将这行的数都置零
+            for(int j = 0;j < n;j ++) {
+                matrix[0][j] = 0;
+            }
+        }
+    }
+}
+
+// 方法三
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        // 简化方法二：
+        int m = matrix.length, n = matrix[0].length;
+        boolean col = false;
+        // 从第一行开始遍历
+        for(int i = 0; i < m;i ++) {
+            // 只用标记列，第一列有0的话，就标记
+            if(matrix[i][0] == 0) col = true;
+            // 从第二列开始遍历，如果有当前值为0，置[i][0]和[0][j]为零
+            for(int j = 1;j < n;j ++) {
+                if(matrix[i][j] == 0) {
+                    matrix[i][0] = matrix[0][j] = 0;
+                }
+            }
+        }
+        // 从第m-1行开始遍历
+        for(int i = m - 1;i >=0;i --) {
+            // 从第一列开始遍历
+            for(int j = 1;j < n;j ++) {
+                // 若[i][0]或者[0][j]为0,// 置当前值零
+                if(matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+            // 若第一列有标记,当前行的第一列置零
+            if(col) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
