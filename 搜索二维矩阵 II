@@ -34,4 +34,76 @@ class Solution {
     }
 }
 
+// 能过部分案例
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        boolean IsHave = false;
+        int m = matrix.length, n = matrix[0].length;
+        if (m == 1) {
+            for(int i = 0;i < n;i ++) {
+                if(matrix[0][i] == target) {
+                    return true;
+                }
+            }
+        } else if (n == 1) {
+            for(int i = 0;i < m;i ++) {
+                if(matrix[i][0] == target) {
+                    return true;
+                }
+            }
+        } else {
+        // for(int i = 0;i < m;i ++) {
+            // 注意这里是n-1！！！！
+            int left = 0, right = n - 1;
+            while(left <= right) {
+                int up = 0,down = n - 1;
+                int mid = (left + right) / 2;
+                if(matrix[0][mid] == target) {
+                    IsHave = true;
+                    return IsHave;
+                } else if(matrix[0][mid] < target) {
+                    left = mid + 1;
+                    while(up <= down) {
+                        int hmid = (up + down) / 2;
+                        if(matrix[hmid][mid] == target) {
+                            IsHave = true;
+                            return IsHave;
+                        } else if(matrix[hmid][mid] < target) {
+                            up = hmid + 1;
+                        } else {
+                            down = hmid - 1;
+                        }
+                    }
+                } else {
+                    right = mid - 1;
+                }
+            }
+        // }
+        }
+        return IsHave;
+    }
+}
 
+
+
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        //  从下往上找
+        // 如果当前行的第一数都大于目标值，则行向上
+        // 如果当前列的值小于目标值，则列向右
+        // 否则返回true
+        int m = matrix.length - 1;
+        int j = 0;
+        while(m >= 0 && j < matrix[0].length) {
+            if(matrix[m][j] > target) {
+                --m;
+                j = 0;
+            } else if(matrix[m][j] < target) {
+                j ++;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+}
