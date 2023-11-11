@@ -1,0 +1,176 @@
+回文链表
+234. 回文链表
+已解答
+简单
+相关标签
+相关企业
+给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。
+
+ 
+
+示例 1：
+
+
+输入：head = [1,2,2,1]
+输出：true
+示例 2：
+
+
+输入：head = [1,2]
+输出：false
+ 
+
+提示：
+
+链表中节点数目在范围[1, 105] 内
+0 <= Node.val <= 9
+ 
+
+进阶：你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+方法0：为什么将整个链表反转后和原来链表对比得到的是错误答案？？？
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head == null) return true;
+        ListNode tempNode = head;
+        tempNode = reverseFun(tempNode);
+
+        boolean result = true;
+        while(result != false && tempNode != null && head != null) { 
+            if(tempNode.val != head.val) {
+                result = false;
+            }
+            tempNode = tempNode.next;
+            head = head.next;
+        }
+        return result;
+    }
+
+    // 定义一个反转链表的函数 reverseFun
+    private ListNode reverseFun(ListNode newNode) {
+        // 定义空的preNode节点，定义当前节点curNode
+        ListNode preNode = null,curNode = newNode;
+        // 遍历当前节点curNode
+        while(curNode != null) {
+            // 定义临时节点存储当前节点的下一节点
+            ListNode temp = curNode.next;
+            // 当前节点的下一节点转为preNode节点
+            curNode.next = preNode;
+            // preNode节点向前移动转为当前节点的下一节点
+            preNode = curNode;
+            // 当前节点转为临时节点
+            curNode = temp;
+        }
+        // 返回preNode节点
+        return preNode;
+    }
+}
+
+
+方法一：
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        // 将链表中的值添加进数组中，利用数组的前后指针得到结果
+        // 定义数组
+        List<Integer> arr = new ArrayList<Integer>();
+        // 遍历链表把数组添加进数组中
+        ListNode newhead = head;
+        while(newhead != null) {
+            arr.add(newhead.val);
+            newhead = newhead.next;
+        }
+        // 利用前后指针开始遍历数组
+        int front = 0,tail = arr.size() - 1;
+        while(front < tail) {        
+            // 如果发现当前数组中的前指针和后指针不相等，返回false
+            if(!arr.get(front).equals(arr.get(tail))) return false;
+            // 前后指针的移动
+            ++ front;
+            -- tail;
+        }
+        // 返回true
+        return true;
+
+    }
+}
+
+
+方法二：
+// 注意事项：
+// 1.外部函数一定要加ListNode，并且这个函数应该在isPalindrome函数外面
+// 2.在遍历链表找前后链表是否完全一样时，终止条件应该是 &&
+// 3.在找链表的前半链表结尾的函数halfFun中的终止条件应该是 考虑fast节点的next和next.next是不是null
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        // 将链表分为两部分：先找到链表的前半部分的最后一个节点frontend，再通过frontend的下一个节点找到链表的后半部分并反转
+        // 只要前半部分链表和后半部分链表不相等，则证明不是回文，返回false
+        // 将原来的链表返回回来
+        // 返回true
+        if(head == null) return true;
+
+        // 通过head拿到前半部分的节点frontNode
+        ListNode frontNode = halfFun(head);
+        // 通过frontNode.next将后半部分链表反转
+        ListNode tailNode = reverseFun(frontNode.next);
+
+        // 定义result为true
+        boolean result = true;
+        ListNode p1 = head;
+        ListNode p2 = tailNode;
+        // 遍历前后半部分两个链表，在后半部分链表为result为false && null时停止截止
+        while(result != false && p2 != null ) { // 这里是&&不是或
+            // 若二者不相等，result为false
+            if(p1.val != p2.val) {
+                result = false;
+            }
+            // 前后节点指向下一位
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        // 返回result
+        return result;
+    }
+        // 定义一个反转链表的函数 reverseFun
+        private ListNode reverseFun(ListNode newNode) { // 这里一定要加ListNode，并且这个函数应该在isPalindrome函数外面
+            // 定义空的preNode节点，定义当前节点curNode
+            ListNode preNode = null,curNode = newNode;
+            // 遍历当前节点curNode
+            while(curNode != null) {
+                // 定义临时节点存储当前节点的下一节点
+                ListNode temp = curNode.next;
+                // 当前节点的下一节点转为preNode节点
+                curNode.next = preNode;
+                // preNode节点向前移动转为当前节点的下一节点
+                preNode = curNode;
+                // 当前节点转为临时节点
+                curNode = temp;
+            }
+            // 返回preNode节点
+            return preNode;
+        }
+
+        // 定义一个找到链表的一半节点的函数 halfFun
+        private ListNode halfFun(ListNode newNode) { // 这里一定要加ListNode，并且这个函数应该在isPalindrome函数外面
+            // 定义快节点fastNode和慢节点slowNode
+            ListNode fastNode = newNode, slowNode = newNode;
+            // 遍历链表直至slowNode的下一个节点为null
+            while(fastNode.next != null && fastNode.next.next != null) { // 这里的next要加上
+                // 快节点向后移动两位
+                fastNode = fastNode.next.next;
+                // 慢节点向后移动一位
+                slowNode = slowNode.next;
+            }
+            // 返回慢节点
+            return slowNode;
+        }
+}
