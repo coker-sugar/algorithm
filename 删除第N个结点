@@ -1,0 +1,38 @@
+给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+
+示例 1：
+
+
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+示例 2：
+
+输入：head = [1], n = 1
+输出：[]
+示例 3：
+
+输入：head = [1,2], n = 1
+输出：[1]
+ 
+
+提示：
+
+链表中结点的数目为 sz
+1 <= sz <= 30
+0 <= Node.val <= 100
+1 <= n <= sz
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        // 双指针:先让右边指针往后走n个,然后两个指针再同时走,当右指针走到了null的时候,此时左指针就在倒数第n个指针的前一个
+        ListNode left = head,right = head;
+        for(int i = 0;i < n;i ++) right = right.next;
+        if(right == null) return head.next;
+        while(right.next != null) { // 注意这里是right.next,因为得走到要删除值的前面一个
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return head;
+    }
+}
