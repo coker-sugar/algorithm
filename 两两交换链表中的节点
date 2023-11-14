@@ -1,0 +1,58 @@
+24. 两两交换链表中的节点
+已解答
+中等
+相关标签
+相关企业
+给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+
+ 
+
+示例 1：
+
+
+输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+示例 2：
+
+输入：head = []
+输出：[]
+示例 3：
+
+输入：head = [1]
+输出：[1]
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        // 快慢指针做交换
+        if(head == null || head.next == null) return head;
+        ListNode slow = head, fast = head.next;
+        ListNode pre = new ListNode(0);
+        pre.next = head;
+        ListNode cur = pre;
+        do{
+            ListNode temp = fast.next;
+            slow.next = temp;
+            fast.next = slow;
+            cur.next = fast;
+            cur = slow;
+
+            if((temp != null) && (temp.next != null))  {
+                slow = temp;
+                fast = slow.next;
+            } else {
+                fast = null;
+            }
+        } while (fast != null);
+        return pre.next;
+    }
+}
+
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head == null || head.next == null) return head;
+        ListNode temp = head.next.next; // 后面递归的head
+        ListNode newhead = head.next; 
+        newhead.next = head; // 把前后节点做交换
+        head.next = swapPairs(temp); // 后节点（原来是前节点） 的下一个应该是下一次 节点交换后的 前节点（原来是后节点）
+        return newhead; // 返回前节点（原来是后节点）
+    }
+}
