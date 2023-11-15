@@ -1,0 +1,100 @@
+25. K 个一组翻转链表
+已解答
+困难
+相关标签
+相关企业
+给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+
+示例 1：
+输入：head = [1,2,3,4,5], k = 2
+输出：[2,1,4,3,5]
+
+示例 2：
+输入：head = [1,2,3,4,5], k = 3
+输出：[3,2,1,4,5]
+// 错误版本
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(head == null || head.next == null || k <= 1) return head;
+        ListNode pre = new ListNode(0);
+        pre.next = head;
+        int n = 0;
+        // 拿到head节点的个数
+        while(head!=null) {
+            ++n;
+            head = head.next;
+        }
+        head = pre.next;
+        ListNode cur = head;
+        ListNode pre1 = null,tail = null;
+        // 只要n-k>0，就一直进行
+        while(n - k > 0) {
+            // 反转从当前节点到第k个节点
+            pre1 = null;
+            tail = null;
+            for(int i = 0;i < k;i ++) {
+                ListNode temp = cur.next;
+                cur.next = pre1;
+                pre1 = cur;
+                cur = temp;
+                if(i == 0) {
+                    tail = pre1;
+                }
+            }
+            tail.next = cur;
+            n -= k;
+        }
+        return pre.next;
+    }
+}
+
+
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || head.next == null){
+            return head;
+        }
+        ListNode pre1 = new ListNode(0);
+        pre1.next = head;   
+
+        ListNode pre = pre1,end = pre1;
+
+        while(end.next != null) {
+            // 遍历k次找到每一次要反转链表的链表尾部，注意要同时判断end的下一个是否为空
+            for(int i = 0;i < k && end != null;i ++) end = end.next;
+            // 若要反转的链表长度小于k，则不需要反转
+            if(end==null) break;
+            // 记录要反转链表的表头，记录下一个链表的表头
+            ListNode next = end.next;
+            // 断开链表
+            end.next = null;
+            ListNode start = pre.next;
+            // 反转链表
+            pre.next = reverse(start);
+            // 反转后把断开的表重新连接起来
+            start.next = next;
+            // 把pre换成下一次要反转的链表的头节点的上一个节点
+            pre = start;
+            // 反转结束，把end换成下一次要反转的链表的头节点的上一个节点
+            end = start;
+        }
+        return pre1.next;
+    }
+    private ListNode reverse(ListNode head) {
+        if (head == null || head.next == null){
+            return head;
+        }
+        ListNode pre = null,cur = head;
+        while(cur != null) {
+            ListNode temp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+}
