@@ -1,0 +1,29 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        int n = nums.length;
+        if(n < 1) return -1;
+        int right = n - 1,left = 0;
+        while(left <= right) {
+            if(nums[left] == target) return left;
+            if(nums[right] == target) return right;
+            int mid = left + (right - left) / 2;
+            if(nums[mid] == target) return mid;
+            // 左边有序
+            if(nums[mid] > nums[right]) {
+                // 目标值在左边
+                if(target < nums[mid] && target >= nums[left]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else { // 右边有序
+                if(target > nums[mid] && target < nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
