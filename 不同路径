@@ -1,0 +1,90 @@
+
+代码
+
+测试用例
+测试用例
+测试结果
+
+62. 不同路径
+已解答
+中等
+相关标签
+相关企业
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+
+问总共有多少条不同的路径？
+
+ 
+
+示例 1：
+
+
+输入：m = 3, n = 7
+输出：28
+示例 2：
+
+输入：m = 3, n = 2
+输出：3
+解释：
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右
+3. 向下 -> 向右 -> 向下
+
+
+组合：m + n - 2个中有n - 1个随机排列
+注意：res应该是long类型的，这里卡了好久，返回的时候要强制转为int类型
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 一共走m + n - 2次，向下走m - 1次，向右走n - 1次
+        long res = 1;
+        int max = m > n ? m : n;
+        int min = m > n ? n : m;
+        for(int i = 1;i < min;i ++) {
+            res = res * max / i;
+            ++ max;
+        }
+        return (int)res;
+    }
+}
+
+实际上就是前一行的同列元素 + 前一列的同行元素的遍历，直到满足要求
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 一共走m + n - 2次，向下走m - 1次，向右走n - 1次
+        int[][] arr = new int[m][n];
+        arr[0][0] = 1;
+        for(int i = 1;i < m;i ++) {
+            arr[i][0] = 1;
+        }
+        for(int i = 1;i < n;i ++) {
+            arr[0][i] = 1;
+        }
+        for(int i = 1;i < m;i ++) {
+            for(int j = 1;j < n;j ++) {
+                arr[i][j] = arr[i - 1][j] + arr[i][j - 1];
+            }
+        }
+        return arr[m - 1][n - 1];
+    }
+}
+
+优化：利用滚动数组
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // 优化：使用滚动数组
+        int[] arr = new int[n];
+        for(int i = 0;i < n;i ++) {
+            arr[i] = 1;
+        }
+        for(int i = 1;i < m;i ++) {
+            for(int j =1;j < n;j ++) {
+                arr[j] +=arr[j - 1];
+            }
+        }
+        return arr[n - 1];
+    }
+}
+
