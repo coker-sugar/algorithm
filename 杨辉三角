@@ -1,0 +1,49 @@
+118. 杨辉三角
+已解答
+简单
+相关标签
+相关企业
+给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+
+示例 1:
+
+输入: numRows = 5
+输出: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+示例 2:
+
+输入: numRows = 1
+输出: [[1]]
+
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        // 按照题意解题就行，要注意的是，二维数组的第二维是动态声明的，根据具体哪一行来声明数组
+        // 注意定义数组的时候用Integer
+        // 将数组转为列表的时候：先定义列表List<List<Integer>> list = new ArrayList<>();然后遍历数组dp:for(Integer[] row : dp);最后添加结果:list.add(Arrays.asList(row));(注意row要转为list列表而不是单纯用row)
+
+
+        // 初始化动态规划数组
+        Integer[][] dp = new Integer[numRows][];
+        // 遍历每一行
+        for(int i = 0;i < numRows;i ++) {
+            // 初始化当前行，长度为i+1
+            dp[i] = new Integer[i + 1];
+            // 每一行的第一个和最后一个总是1
+            dp[i][0] = dp[i][i] = 1;
+            // 计算中间属性，遍历到i之前
+            for(int j = 1;j < i;j ++) {
+                // 当前值为上一行相邻的两个数之和
+                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
+            }
+        }
+        // 将动态规划数组转为列表
+        List<List<Integer>> list = new ArrayList<>();
+        // 遍历动态规划数组
+        for(Integer[] row : dp) 
+            // 将每一行加入到列表中
+            list.add(Arrays.asList(row));
+        // 返回结果
+        return list;
+    }
+}
