@@ -10,7 +10,6 @@
 输入: nums = [0]
 输出: [0]
 
-
 方法一：暴力解法
 var moveZeroes = function(nums) {
     for(let i = 0;i < nums.length; i ++) {
