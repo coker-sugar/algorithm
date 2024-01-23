@@ -1,0 +1,65 @@
+230. 二叉搜索树中第K小的元素
+已解答
+中等
+相关标签
+相关企业
+提示
+给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+
+ 
+
+示例 1：
+
+
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+示例 2：
+
+
+输入：root = [5,3,6,2,4,null,null,1], k = 3
+输出：3
+class Solution {
+    TreeNode ans;
+    int n = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        n = k;
+        zhongxu(root);
+        return ans.val;
+    }
+    public void zhongxu(TreeNode node) {
+        if(node == null) return;
+        zhongxu(node.left);
+        if(--n == 0) {
+            ans = node;
+            return;
+        }
+        zhongxu(node.right);
+    }
+}
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        // 定义一个栈，先进后出
+        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
+        // 遍历root和栈
+        while(root!=null || !stack.isEmpty()) {
+            // 遍历root，先到达树的最左边
+            while(root != null) {
+                // 把根压入栈中
+                stack.push(root);
+                // 根换为左根
+                root = root.left;
+            }
+            // 根赋值为出栈的结点
+            root = stack.pop();
+            // 减k
+            --k;
+            // 若k为0就退出循环
+            if(k == 0) break;
+            // 根转为右根
+            root = root.right;
+        }
+        // 返回根的值
+        return root.val;
+    }
+}
