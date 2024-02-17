@@ -7,7 +7,6 @@ class Solution {
         while(true) {
             for(int i = left;i <= right; i ++) arr.add(matrix[up][i]);
             if(++up > down) break;
-
             for(int i = up; i <= down; i ++) arr.add(matrix[i][right]);
             if(--right < left) break;
 
