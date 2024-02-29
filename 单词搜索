@@ -1,0 +1,71 @@
+79. 单词搜索
+已解答
+中等
+相关标签
+相关企业
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+ 
+
+示例 1：
+
+
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+输出：true
+示例 2：
+
+
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+输出：true
+示例 3：
+
+
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+输出：false
+ 
+
+提示：
+
+m == board.length
+n = board[i].length
+1 <= m, n <= 6
+1 <= word.length <= 15
+board 和 word 仅由大小写英文字母组成
+
+  
+class Solution {
+    int height = 0;
+    int width = 0;
+    public boolean exist(char[][] board, String word) {
+        height = board.length;
+        width = board[0].length;
+        // 将word转为字符数组
+        char[] words = word.toCharArray();
+        // 循环遍历二维数组
+        for(int i = 0;i < height;i ++) {
+            for(int j = 0;j < width;j ++) {
+                // 如果深度遍历为true,返回true(带参数board,words,i,j,0)
+                if(dfs(board,words,i,j,0)) return true;
+            }
+        }
+        return false;
+    }
+    // 深度遍历函数
+    public boolean dfs(char[][] board,char[] words,int i,int j,int k) {
+        // 做边界判定和字符匹配:如果i超一维数组长度 || i < 0 || j超二维数组长度 || j < 0 || 当前字符不和words匹配 ------> 返回false
+        if(i >= height || j >= width || i < 0 || j < 0 || board[i][j] != words[k]) return false;
+        // 如果k为一维数组长度-1,返回true -------> 说明一路都为true顺利到达了最后一个字符
+        if(k == words.length - 1) return true;
+        // 令当前字符为'\0' -------> 证明已经遍历过
+        board[i][j] = '\0';
+        // 定义布尔值 接收 : 深度遍历 下 , 上, 右 , 左 的值,注意k要 + 1
+        boolean res = dfs(board,words,i + 1,j,k + 1) || dfs(board,words,i - 1,j,k + 1)
+                        || dfs(board,words,i,j + 1,k + 1) || dfs(board,words,i,j - 1,k + 1);
+        // 当前字符恢复原来的值
+        board[i][j] = words[k];
+        // 返回布尔值
+        return res;
+    }
+}
