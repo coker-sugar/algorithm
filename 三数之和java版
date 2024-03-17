@@ -1,6 +1,5 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-
         // 再写心得：
             // 1、定义、添加数组不熟练，对于构建空数组和添加数组的熟练度不够
             // 2、必要处细节没有做好：因为题目中要求不能重复添加，所以当left、middle、right三个索引对应的值有重复时，应当跳过；把握好三者跳过的时机，left应该在遍历一次后再跳过，判定条件为：left > 0 && nums[left] == nums[left -1]；middle和right应该在数组和为0时，再把middle和right跳过。
