@@ -1,0 +1,26 @@
+19. 删除链表的倒数第 N 个结点
+已解答
+中等
+相关标签
+相关企业
+提示
+给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+示例 1：
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+《————————————利用快慢指针，快指针先走n次，之后和慢指针一起走，直到快指针到null，这个时候慢指针就到了倒数第n个节点了（不过这里的慢指针要往前移，怎么办呢？在head前面加一个虚拟节点）————————————》
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0,head);
+        ListNode fast = head,slow = dummy;
+        for(int i = 0;i < n;i++) {
+            fast = fast.next;
+        }
+        while(fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+}
