@@ -9,8 +9,6 @@ class Solution {
         }
 
         int len = nums.length;
-
-
         Arrays.sort(nums);
 
 
