@@ -30,7 +30,6 @@ class Solution {
             fast.next = slow;
             cur.next = fast;
             cur = slow;
-
             if((temp != null) && (temp.next != null))  {
                 slow = temp;
                 fast = slow.next;
